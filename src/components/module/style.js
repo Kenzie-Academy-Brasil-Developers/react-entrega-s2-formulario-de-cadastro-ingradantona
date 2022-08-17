@@ -1,51 +1,75 @@
-import styled from "styled-components";
+import styled, {css , keyframes} from "styled-components";
 
-export const Div = styled.div`
-    position: fixed;
-    top: 25px;
-    left: 84vw;
-    width: 15vw;
-    min-width: 250px;
-    height: 70px;
-    background-color: var(--grey-2);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-    box-sizing: border-box;
-    gap: 10px;
-
-    & > svg {
-        height: 30px;
-        width: 30px;
+const zoomInAnimation = keyframes`
+    0% {
+        display: none;
+        transform: scale(0.8)
     }
-
-    & > p {
-        font-size: 14px;
-        font-weight: 700;
-        color: var(--grey-0);
+    95%{
+        transform: scale(1.1)
     }
-    & > button {
-        position: fixed;
-        top: 30px;
-        right: 30px;
-        border: none;
-        background-color: transparent;
-        color: var(--grey-1);
-    }
-
-    & > div {
-
+    100%{
+        transform: scale(1)
     }
 `
 
-export const Line = styled.div`
+const zoomOutAnimatio = keyframes`
+  from {
+    transform: scale(1)
+  }
+  to {
+    transform: scale(0.6);
+    display: none;
+  }
+`;
+
+export const Div = styled.div`
     position: fixed;
-    top: 90px;
-    left: 84vw;
-    height: 6px;
-    width: 10vw;
-    border-radius: 0 0 0 4px;
-    min-width: 200px;
-    background-color: ${(props) => props.colormessage};
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+export const Container = styled.div`
+    width: calc(100vw - 70px);
+    max-width: 380px;
+    height: 50vh;
+    max-height: 340px;
+    background-color: var(--grey-3);
+    border-radius: 4px;
+    ${({ isLeave }) =>
+    css`
+      animation: ${isLeave ? zoomOutAnimatio : zoomInAnimation}
+        0.5s;
+    `}
+    animation-fill-mode: forwards;
+
+    & > div {
+        background-color: var(--grey-2);
+        padding: 0 15px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 4px 4px 0 0 ;
+
+        & > h2 {
+            color: var(--grey-0);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        & > button {
+            border: none;
+            background-color: transparent;
+            color: var(--grey-1);
+            cursor: pointer;
+        }
+
+    }
 `

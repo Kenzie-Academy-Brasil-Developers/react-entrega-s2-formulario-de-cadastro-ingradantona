@@ -1,46 +1,41 @@
-import { useEffect, useState } from "react";
-import { Loading, Main, Section } from "./style";
-import axios from "axios";
+import { useContext} from "react";
+import { Loading, Main, Section, Div } from "./style";
 import { useNavigate } from "react-router-dom";
+import  {AuthContext} from '../../context/AuthContext'
+import Technologies from "../../components/Technologies/Technologies";
 
 export default function HomePage(){
-    const [user, setUser] = useState(null)
     const navigate = useNavigate()
+    const { user, loading, logout} = useContext(AuthContext)
 
-    const logout = async() => {
-        setUser(null)
-        window.localStorage.clear()
-        navigate('/login')
-    }
-
-    useEffect(() =>{
-        window.localStorage.getItem('KenzieHub_User_id') ? (
-            axios.get(`https://kenziehub.herokuapp.com/users/${window.localStorage.getItem('KenzieHub_User_id')}`)
-            .then(response => setUser(response.data))
-            .catch(err => console.log(err))
-        ) : (
-            navigate('/login')
-        )        
-    }, [user])
-    
     return(
         <Main>
-            <div>
-                <h1>Kenzie Hub</h1>
-                <button onClick={() => logout()}>Voltar</button>
-            </div>
-            <Section>
-                {
-                    user ? (
+            {
+                loading ? (
+                    <Div>
+                        <Loading>
+                            <div></div>
+                        </Loading>
+                    </Div>
+                ) : user ? (
+                    <>
                         <div>
-                            <h2>Olá, {user?.name}</h2>
-                            <p>{user?.course_module}</p>
+                            <h1>Kenzie Hub</h1>
+                            <button onClick={() => logout()}>Voltar</button>
                         </div>
-                    ) : (
-                        <Loading/>
-                    )
-                }
-            </Section>
+                        <Section>
+                            <div>
+                                <h2>Olá, {user.name}</h2>
+                                <p>{user.course_module}</p>
+                            </div>
+                        </Section>
+                        <Technologies/>
+                    </>
+                ) : (
+                    navigate('/login', {replace: true})
+                )
+            }
+            
         </Main>
     )
 }

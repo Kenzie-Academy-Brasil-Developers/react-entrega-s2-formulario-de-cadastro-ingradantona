@@ -1,39 +1,54 @@
-import { Div, Line } from "./style";
-import {AiFillCheckCircle , AiFillExclamationCircle} from 'react-icons/ai'
+import { Div, Container} from "./style";
+import { useContext, useEffect} from "react";
+import { ModalContext } from "../../context/ModalContext";
+import AddTechForm from "../TechForms/AddTechForm";
+import EditTechForm from "../TechForms/editTech";
 
-export default function Module({message, setMessage}){
+export default function Module(){
+    const {isOpenModal, setIsOpenModal, modalType, isLeave, setIsLeave} = useContext(ModalContext)
+    
+
+    useEffect(()=>{
+        
+        let timer;
+        if (isLeave) {
+            timer = setTimeout(() => {
+                setIsOpenModal(false);
+                setIsLeave(false)
+            }, 400)
+        }
+
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [isLeave])
+
     return (
         <>
-            {
-                message === null ? (
-                    <></>
-                ) : (
-                    <Div>
-                        {
-                            message === true? (
-                                <>
-                                    <AiFillCheckCircle color='var(--sucess)'/>
-                                    <p>Conta criada com sucesso!</p>
-                                    <Line colormessage='var(--sucess)'></Line>
-                                </>
-                                
-                            ) : message === false? (
-                                <>
-                                    <AiFillExclamationCircle color='var(--negative)'/>
-                                    <p>Ops! Algo deu errado</p>
-                                    <Line colormessage='var(--negative)'></Line>
-                                </>
-                            ) : (
-                                <></>
-                            )
-                        }
-                        <button onClick={() => setMessage(null)}>x</button>
-                        
-                    </Div>
-                )
-            }
-            
+        { isOpenModal && (
+            <Div>
+                {
+                    modalType === 'register' ? (
+                        <Container isLeave={isLeave}>
+                            <div>
+                                <h2>Cadastrar tecnologia</h2>
+                                <button onClick={()=> setIsLeave(true)}>x</button>
+                            </div>
+                            <AddTechForm/>
+                        </Container>
+                    ) : (
+                        <Container isLeave={isLeave}>
+                            <div>
+                                <h2>Editar tecnologia</h2>
+                                <button onClick={()=> setIsLeave(true)}>x</button>
+                            </div>
+                            <EditTechForm/>
+                        </Container>
+                    )
+                }
+            </Div>
+        )          
+        }
         </>
-        
     )
 }

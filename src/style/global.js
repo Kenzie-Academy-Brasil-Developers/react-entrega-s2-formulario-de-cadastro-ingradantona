@@ -26,5 +26,6 @@ export const GlobalStyle = createGlobalStyle`
 
     --negative: #e83f5b;
     --sucess: #3fe864;
+    --informative: #fbec5d
   }
 `
