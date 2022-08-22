@@ -10,7 +10,7 @@ export default function Module(){
 
     useEffect(()=>{
         
-        let timer : void
+        let timer : ReturnType<typeof setTimeout>
         if (isLeave) {
             timer = setTimeout(() => {
                 setIsOpenModal(false);
