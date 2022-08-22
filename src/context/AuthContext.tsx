@@ -1,19 +1,58 @@
-import { createContext, useEffect, useContext } from "react";
+import React, { createContext, useEffect, useContext, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { api } from "../services/api";
 import { ToastContext } from "./ToastContext";
 
-export const AuthContext = createContext({})
+interface IAuthProviderProps {
+    children: ReactNode
+}
 
-const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null)
-    const [techs, setTechs] = useState([])
-    const [loading, setLoading] = useState(true)
+export interface ITech {
+    status: string,
+    title: string,
+    id?: string
+}
+
+interface IUser {
+    id: string,
+    name: string,
+    email: string,
+    course_module: string,
+    bio: string,
+    contact: string,
+    created_at: string,
+    updated_at: string,
+    avatar_url: null
+    techs?: ITech[],
+    works?: ITech[],
+}
+
+export interface ISingInProps {
+    email: string,
+    password: string
+}
+
+interface IAuthContext {
+    user: IUser | null,
+    signIn: (data: ISingInProps) => Promise<void>,
+    logout: () => Promise<void>,
+    loading: boolean,
+    techs: ITech[],
+    setTechs: React.Dispatch<React.SetStateAction<ITech[]>>,
+    loadUser: () => Promise<void>
+}
+
+export const AuthContext = createContext<IAuthContext>({} as IAuthContext)
+
+const AuthProvider = ({children} : IAuthProviderProps) => {
+    const [user, setUser] = useState<IUser | null>(null)
+    const [techs, setTechs] = useState<ITech[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
     const navigate = useNavigate()
     const {addToast} = useContext(ToastContext)
 
-    const signIn = async (data) => {
+    const signIn = async (data: ISingInProps) : Promise<void> => {
         await api.post('/sessions',data)
         .then(response => {
             window.localStorage.setItem("KenzieHub_Token", response.data.token)
@@ -21,7 +60,7 @@ const AuthProvider = ({children}) => {
             setUser(response.data.user)
             setTechs(response.data.user.techs)
 
-            api.defaults.headers.authorization = `Bearer ${response.data.token}`
+            api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
 
             addToast({
                 title: 'Login realizado com sucesso',
@@ -39,12 +78,12 @@ const AuthProvider = ({children}) => {
         })
     }
 
-    async function loadUser() {
+    async function loadUser() : Promise<void> {
         const token = window.localStorage.getItem('KenzieHub_Token')
 
         if (token) {
             try{
-                api.defaults.headers.authorization = `Bearer ${token}`
+                api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
                 const {data} = await api.get(`/profile`)
 
@@ -63,7 +102,7 @@ const AuthProvider = ({children}) => {
         loadUser() 
     },[])
 
-    const logout = async() => {
+    const logout = async() : Promise<void> => {
         window.localStorage.clear()
         navigate('/login', {replace: true})
     }

@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { ITech } from "../../context/AuthContext";
 import { TechsContext } from "../../context/TechsContext";
 import { Form } from "./styles";
 
 export default function AddTechForm (){
-    const {register, handleSubmit} = useForm()
+    const {register, handleSubmit} = useForm<ITech>()
     const {registerTech} = useContext(TechsContext)
 
     return (

@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { LoginSchema } from "../Schemas/Schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useContext } from "react";
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext, ISingInProps as ILoginUser } from '../../context/AuthContext'
 
 export default function LoginForm(){
-    const {register, handleSubmit, formState: {errors}} = useForm({resolver: yupResolver(LoginSchema)})
+    const {register, handleSubmit, formState: {errors}} = useForm<ILoginUser>({resolver: yupResolver(LoginSchema)})
     const {signIn} = useContext(AuthContext)
 
     return (

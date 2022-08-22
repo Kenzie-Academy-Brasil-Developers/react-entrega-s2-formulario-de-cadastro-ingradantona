@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+interface IButton {
+    color: string,
+    width: number,
+}
+
 export const Form = styled.form`
     width: 100%;
     height: calc(100% - 40px);
@@ -47,9 +52,9 @@ export const Form = styled.form`
         gap: 15px;
     }
 `
-export const Button = styled.button`
+export const Button = styled.button<IButton>`
     background-color: ${(props) => props.color};
-    width: ${(props) => props.width};
+    width: ${(props) => props.width}%;
     height: 40px;
     border-radius: 4px;
     color: var(--grey-0);

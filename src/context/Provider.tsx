@@ -2,8 +2,13 @@ import AuthProvider from './AuthContext';
 import ToastProvider from './ToastContext';
 import ModalProvider from './ModalContext';
 import TechsProvider from './TechsContext';
+import { ReactNode } from 'react';
 
-const Provider = ({ children }) => (
+interface IProvider {
+  children: ReactNode
+}
+
+const Provider = ({ children }: IProvider) => (
   <ToastProvider>
     <ModalProvider>
       <AuthProvider>

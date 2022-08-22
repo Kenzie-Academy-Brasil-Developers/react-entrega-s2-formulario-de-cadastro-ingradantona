@@ -1,5 +1,9 @@
 import styled, {css , keyframes} from "styled-components";
 
+interface IContainerProps {
+    isLeave: boolean
+  }
+
 const zoomInAnimation = keyframes`
     0% {
         display: none;
@@ -35,7 +39,7 @@ export const Div = styled.div`
     justify-content: center;
 `
 
-export const Container = styled.div`
+export const Container = styled.div<IContainerProps>`
     width: calc(100vw - 70px);
     max-width: 380px;
     height: 50vh;

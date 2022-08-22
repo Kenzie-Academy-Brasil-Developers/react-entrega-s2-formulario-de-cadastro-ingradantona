@@ -1,13 +1,18 @@
 import { useContext } from "react";
+import { ITech } from "../../context/AuthContext";
 import { ModalContext } from "../../context/ModalContext";
 import { TechsContext } from "../../context/TechsContext";
 import { Button } from "./style";
 
-export default function CardTech ({tech}) {
+interface ICardTechProps {
+    tech: ITech
+}
+
+export default function CardTech ({tech}: ICardTechProps) {
     const {setModalType, setIsOpenModal} = useContext(ModalContext)
     const {setTech} = useContext(TechsContext)
 
-    const editTech = () => {
+    const editTech = (): void => {
         setModalType('edit')
         setTech(tech)
         setIsOpenModal(true)

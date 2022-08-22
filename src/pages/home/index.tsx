@@ -1,23 +1,28 @@
 import { useContext} from "react";
 import { Loading, Main, Section, Div } from "./style";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import  {AuthContext} from '../../context/AuthContext'
 import Technologies from "../../components/Technologies/Technologies";
 
 export default function HomePage(){
-    const navigate = useNavigate()
     const { user, loading, logout} = useContext(AuthContext)
 
-    return(
-        <Main>
-            {
-                loading ? (
+    if (loading) {
+        return (
+            <Main>
                     <Div>
                         <Loading>
                             <div></div>
                         </Loading>
                     </Div>
-                ) : user ? (
+            </Main>
+        )
+    }
+
+    return(
+        <Main>
+            {
+                 user ? (
                     <>
                         <div>
                             <h1>Kenzie Hub</h1>
@@ -32,7 +37,7 @@ export default function HomePage(){
                         <Technologies/>
                     </>
                 ) : (
-                    navigate('/login', {replace: true})
+                    <Navigate to={'/login'} replace/>
                 )
             }
             

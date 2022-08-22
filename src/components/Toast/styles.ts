@@ -1,5 +1,13 @@
 import styled, {css, keyframes} from "styled-components";
 
+interface IContainerProps {
+  isLeave: boolean
+}
+
+interface ILineProps {
+  colormessage: string
+}
+
 const translateXAnimationFrom = keyframes`
     0% {
         background: transparent;
@@ -23,7 +31,7 @@ const translateXAnimationLeave = keyframes`
   }
 `;
 
-export const Container = styled.div`
+export const Container = styled.div<IContainerProps>`
     position: relative;
     margin: 25px;
     width: 20vw;
@@ -64,7 +72,7 @@ export const Container = styled.div`
         cursor: pointer;
     }
 `
-export const Line = styled.div`
+export const Line = styled.div<ILineProps>`
     position: absolute;
     bottom: 0;
     left: 0;

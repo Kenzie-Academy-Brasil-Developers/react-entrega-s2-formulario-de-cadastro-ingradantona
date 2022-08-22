@@ -2,14 +2,18 @@ import { Container, Line } from "./styles";
 import { useEffect, useState } from 'react';
 import { useContext } from "react";
 import {AiFillCheckCircle , AiFillExclamationCircle, AiFillCloseCircle} from 'react-icons/ai'
-import { ToastContext } from "../../context/ToastContext";
+import { IToast, ToastContext } from "../../context/ToastContext";
 
-export default function Toast({message}){
-    const [isLeave, setIsLeave] = useState(false);
+interface IToastProps {
+  message: IToast
+}
+
+export default function Toast({message}: IToastProps){
+    const [isLeave, setIsLeave] = useState<boolean>(false);
     const {removeToast} = useContext(ToastContext)
 
     useEffect(() => {
-        let timer;
+        let timer : ReturnType<typeof setTimeout>
     
         if (isLeave) {
           timer = setTimeout(() => {
@@ -24,7 +28,7 @@ export default function Toast({message}){
         return () => {
           clearTimeout(timer);
         };
-      }, [isLeave]);
+      }, [isLeave, message.id, removeToast]);
 
     return(
         <Container isLeave ={isLeave}>

@@ -8,13 +8,23 @@ import { ToastContext } from "../../context/ToastContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
+interface IUserRegister {
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    course_module: string,
+    bio: string,
+    contact: string,
+}
+
 export default function RegisterForm () {
     const {addToast} = useContext(ToastContext)
     const navigate = useNavigate()
 
-    const {register, handleSubmit, formState: {errors}} = useForm({resolver: yupResolver(RegisterSchema)})
+    const {register, handleSubmit, formState: {errors}} = useForm<IUserRegister>({resolver: yupResolver(RegisterSchema)})
 
-    const submit = (data) => {
+    const submit = (data : IUserRegister) : void => {
         axios.post( "https://kenziehub.herokuapp.com/users", data)
         .then(response => {
             console.log(response.data)
